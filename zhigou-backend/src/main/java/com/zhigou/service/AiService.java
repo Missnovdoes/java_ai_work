@@ -1,10 +1,12 @@
 package com.zhigou.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zhigou.config.AiConfig;
-import lombok.Data;
+import com.zhigou.exception.AiServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,17 +21,13 @@ public class AiService {
     private final WebClient doubaoWebClient;
     private final AiConfig aiConfig;
 
-    public AiService(WebClient doubaoWebClient, AiConfig aiConfig) {
+    public AiService(@Qualifier("doubaoWebClient") WebClient doubaoWebClient, AiConfig aiConfig) {
         this.doubaoWebClient = doubaoWebClient;
         this.aiConfig = aiConfig;
     }
 
     /**
      * 调用豆包 API 生成回复
-     *
-     * @param systemPrompt 系统提示词
-     * @param userMessage  用户消息
-     * @return AI 生成的文本回复
      */
     public String generateResponse(String systemPrompt, String userMessage) {
         var requestBody = Map.of(
@@ -50,30 +48,37 @@ public class AiService {
                 .bodyToMono(DoubaoApiResponse.class)
                 .block();
 
-        if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
-            log.error("豆包 API 返回空响应");
-            throw new RuntimeException("豆包 API 返回空响应");
+        if (response == null || response.choices == null || response.choices.isEmpty()) {
+            throw new AiServiceException("豆包 API 返回空响应");
         }
 
-        var content = response.getChoices().get(0).getMessage().getContent();
+        String content = response.choices.get(0).message.content;
         log.debug("豆包 API 回复: {}", content);
 
         return content.trim();
     }
 
-    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class DoubaoApiResponse {
         private List<Choice> choices;
+        public List<Choice> getChoices() { return choices; }
+        public void setChoices(List<Choice> choices) { this.choices = choices; }
     }
 
-    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Choice {
         private Message message;
+        public Message getMessage() { return message; }
+        public void setMessage(Message message) { this.message = message; }
     }
 
-    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Message {
         private String role;
         private String content;
+        public String getRole() { return role; }
+        public void setRole(String role) { this.role = role; }
+        public String getContent() { return content; }
+        public void setContent(String content) { this.content = content; }
     }
 }

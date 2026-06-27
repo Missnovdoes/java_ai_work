@@ -1,27 +1,26 @@
 package com.zhigou.config;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Data
 @Configuration
-@ConfigurationProperties(prefix = "supabase")
 public class WebClientConfig {
-    private String url;
-    private String key;
+
+    private final SupabaseProperties supabase;
+
+    public WebClientConfig(SupabaseProperties supabase) {
+        this.supabase = supabase;
+    }
 
     @Bean
     public WebClient supabaseWebClient() {
-        String baseUrl = url + "/rest/v1/";
         return WebClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader("apikey", key)
-                .defaultHeader("Authorization", "Bearer " + key)
+                .baseUrl(supabase.getUrl() + "/rest/v1/")
+                .defaultHeader("apikey", supabase.getKey())
+                .defaultHeader("Authorization", "Bearer " + supabase.getKey())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }

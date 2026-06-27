@@ -78,7 +78,7 @@ const popularProducts = [
 ]
 
 const promotions = [
-  { id: 1, title: '新用户优惠', icon: '🎁', description: '注册即送50元优惠券', validity: '有效期至2023-12-31' },
+  { id: 1, title: '新用户优惠', icon: '🎁', description: '注册即送50元优惠券', validity: '长期有效' },
   { id: 2, title: '满减活动', icon: '💰', description: '满1000减100，满2000减250', validity: '长期有效' }
 ]
 </script>

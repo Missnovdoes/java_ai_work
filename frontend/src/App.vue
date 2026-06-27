@@ -23,7 +23,7 @@
           <div class="flex items-center space-x-4">
             <router-link to="/cart" class="text-gray-600 hover:text-blue-600 relative" title="购物车">
               <span class="text-xl">🛒</span>
-              <span class="absolute top-3 right-3 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">0</span>
+              <span v-if="cartCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{{ cartCount }}</span>
             </router-link>
             <button class="text-gray-600 hover:text-blue-600" title="收藏">
               <span class="text-xl">❤️</span>
@@ -109,7 +109,7 @@
         
         <!-- 版权信息 -->
         <div class="mt-12 pt-8 border-t border-gray-700 text-center text-gray-500 text-sm">
-          <p>© 2023 二手交易平台. 保留所有权利.</p>
+          <p>© {{ currentYear }} 智购二手交易平台. 保留所有权利.</p>
         </div>
       </div>
     </footer>
@@ -117,13 +117,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import ProductDetail from './components/ProductDetail.vue'
-import ChatComponent from './components/ChatComponent.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import authService from './auth.js'
+
+const currentYear = new Date().getFullYear()
 
 // 用户状态
 const currentUser = ref(null)
+
+// 购物车数量
+const cartCount = ref(0)
+
+function updateCartCount() {
+  const saved = localStorage.getItem('cartItems')
+  if (saved) {
+    const items = JSON.parse(saved)
+    cartCount.value = items.reduce((sum, item) => sum + (item.quantity || 1), 0)
+  } else {
+    cartCount.value = 0
+  }
+}
 
 // 获取当前用户
 async function fetchCurrentUser() {
@@ -132,14 +145,23 @@ async function fetchCurrentUser() {
 }
 
 // 监听用户认证状态变化
-const { data: authListener } = authService.onAuthStateChange((event, session) => {
-  console.log('认证状态变化:', event, session)
-  fetchCurrentUser()
-})
+let authUnsubscribe = null
 
 // 组件挂载时获取用户信息
 onMounted(() => {
   fetchCurrentUser()
+  updateCartCount()
+  window.addEventListener('cart-updated', updateCartCount)
+
+  const { data } = authService.onAuthStateChange((_event, _session) => {
+    fetchCurrentUser()
+  })
+  authUnsubscribe = data?.subscription?.unsubscribe
+})
+
+onUnmounted(() => {
+  window.removeEventListener('cart-updated', updateCartCount)
+  if (authUnsubscribe) authUnsubscribe()
 })
 
 // 用户登出

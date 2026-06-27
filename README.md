@@ -56,38 +56,36 @@
 ### 环境要求
 
 - JDK 17+
-- Node.js 18+
+- Node.js 18+（仅修改前端时需要）
 - Docker（可选）
 
-### 后端启动
+### IDEA 一键启动
 
-```bash
-cd zhigou-backend
+1. 用 IDEA 打开 `zhigou-backend/pom.xml` 作为 Maven 项目
+2. 运行 `ZhigouApplication.java` 的 main 方法
+3. 浏览器访问 **http://localhost:5000**
 
-# 设置环境变量
-export SUPABASE_URL=https://xxx.supabase.co
-export SUPABASE_KEY=your_service_role_key
-export DOUBAO_API_KEY=your_doubao_api_key
+前端已集成在 `resources/static/` 中，Spring Boot 直接 serve，无需额外启动前端。
 
-# 启动
-./mvnw spring-boot:run
-# 后端运行在 http://localhost:5000
-```
-
-### 前端启动
+### 前端开发（修改前端时）
 
 ```bash
 cd frontend
 npm install
-npm run dev
-# 前端运行在 http://localhost:5173
+npm run dev           # 开发模式 http://localhost:3000
+
+# 修改完成后构建并同步到后端
+npm run build
+cp -r dist/* ../zhigou-backend/src/main/resources/static/
 ```
 
 ### Docker 一键部署
 
 ```bash
+cd zhigou-backend
+mvn package -DskipTests
 docker-compose up -d
-# 前端 → 80 端口，后端 → 5000 端口
+# 访问 http://localhost
 ```
 
 ## API 接口

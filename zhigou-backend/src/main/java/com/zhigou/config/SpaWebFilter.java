@@ -20,7 +20,7 @@ public class SpaWebFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String path = request.getRequestURI();
 
-        // API、actuator、静态资源（带扩展名）不拦截
+        // API、actuator、静态资源（带扩展名，如图片/CSS/JS）不拦截
         if (path.startsWith("/api/") || path.startsWith("/actuator/") || path.contains(".")) {
             filterChain.doFilter(request, response);
             return;

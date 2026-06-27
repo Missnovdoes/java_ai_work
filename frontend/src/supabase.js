@@ -9,65 +9,71 @@ if (config.useMock) {
   console.log('⚠️  使用模拟Supabase客户端，数据将不会持久化存储');
   
   // 模拟数据存储
+  const mockProducts = [
+    {
+      id: 1,
+      name: '智能手表 Pro',
+      images: ['https://ts4.tc.mm.bing.net/th/id/OIP-C.VP82W90NG4jgee06tQemgQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3', 'https://ts3.tc.mm.bing.net/th/id/OIP-C.Va6Kix185-0fUdv1GErmtwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3', 'https://n.sinaimg.cn/sinacn10119/74/w2048h1226/20191118/fd91-iipztfe7943518.jpg'],
+      price: 1299,
+      original_price: 1599,
+      cost_price: 900,
+      description: '这款智能手表具有心率监测、睡眠追踪、防水等功能，采用高清触摸屏幕，支持多种运动模式，续航时间长达7天，是您健康生活的好帮手。',
+      category: '智能设备',
+      colors: ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF'],
+      sizes: ['S', 'M', 'L', 'XL'],
+      stock: 150,
+      reviews: [],
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 2,
+      name: '智能手机 X',
+      images: ['https://picsum.photos/id/1016/600/400', 'https://picsum.photos/id/1017/600/400', 'https://picsum.photos/id/1019/600/400'],
+      price: 6999,
+      original_price: 7999,
+      cost_price: 4900,
+      description: '旗舰级智能手机，强大性能，出色拍照体验，支持5G网络，大容量电池，让您畅享智能生活。',
+      category: '智能设备',
+      colors: ['#000000', '#FFFFFF', '#FF6B6B', '#4ECDC4'],
+      sizes: ['64GB', '128GB', '256GB', '512GB'],
+      stock: 200,
+      reviews: [],
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 3,
+      name: '智能音箱',
+      images: ['https://picsum.photos/id/1018/600/400', 'https://picsum.photos/id/1020/600/400', 'https://picsum.photos/id/1021/600/400'],
+      price: 299,
+      original_price: 399,
+      cost_price: 200,
+      description: '智能语音助手，支持多种智能家居控制，高品质音效，清晰语音识别，让您的家更智能。',
+      category: '智能家居',
+      colors: ['#000000', '#FFFFFF', '#F7DC6F', '#85C1E9'],
+      sizes: ['标准版', '增强版'],
+      stock: 300,
+      reviews: [],
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 4,
+      name: '无线耳机',
+      images: ['https://picsum.photos/id/1019/600/400', 'https://picsum.photos/id/1022/600/400', 'https://picsum.photos/id/1023/600/400'],
+      price: 799,
+      original_price: 999,
+      cost_price: 550,
+      description: '主动降噪，高清音质，舒适佩戴，长效续航，支持无线充电，让您享受沉浸式音乐体验。',
+      category: '智能设备',
+      colors: ['#000000', '#FFFFFF', '#9B59B6', '#3498DB'],
+      sizes: ['均码'],
+      stock: 250,
+      reviews: [],
+      created_at: new Date().toISOString()
+    }
+  ];
+
   const mockData = {
-    products: [
-      { 
-        id: 1, 
-        name: '智能手表 Pro', 
-        images: ['https://picsum.photos/id/1015/600/400', 'https://picsum.photos/id/1016/600/400', 'https://picsum.photos/id/1018/600/400'], 
-        price: 1299, 
-        original_price: 1599, 
-        description: '9成新智能手表，支持健康监测、运动追踪等功能', 
-        category: '智能设备',
-        colors: ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF'],
-        sizes: ['S', 'M', 'L', 'XL'],
-        stock: 150,
-        reviews: [],
-        created_at: new Date().toISOString() 
-      },
-      { 
-        id: 2, 
-        name: '智能手机 X', 
-        images: ['https://picsum.photos/id/1016/600/400', 'https://picsum.photos/id/1017/600/400', 'https://picsum.photos/id/1019/600/400'], 
-        price: 6999, 
-        original_price: 7999, 
-        description: '8成新旗舰手机，高性能处理器，出色拍照体验', 
-        category: '智能设备',
-        colors: ['#000000', '#FFFFFF', '#FF6B6B', '#4ECDC4'],
-        sizes: ['64GB', '128GB', '256GB', '512GB'],
-        stock: 200,
-        reviews: [],
-        created_at: new Date().toISOString() 
-      },
-      { 
-        id: 3, 
-        name: '智能音箱', 
-        images: ['https://picsum.photos/id/1018/600/400', 'https://picsum.photos/id/1020/600/400', 'https://picsum.photos/id/1021/600/400'], 
-        price: 299, 
-        original_price: 399, 
-        description: '全新智能音箱，语音助手功能', 
-        category: '智能家居',
-        colors: ['#000000', '#FFFFFF', '#F7DC6F', '#85C1E9'],
-        sizes: ['标准版', '增强版'],
-        stock: 300,
-        reviews: [],
-        created_at: new Date().toISOString() 
-      },
-      { 
-        id: 4, 
-        name: '无线耳机', 
-        images: ['https://picsum.photos/id/1019/600/400', 'https://picsum.photos/id/1022/600/400', 'https://picsum.photos/id/1023/600/400'], 
-        price: 799, 
-        original_price: 999, 
-        description: '9成新无线耳机，主动降噪', 
-        category: '智能设备',
-        colors: ['#000000', '#FFFFFF', '#9B59B6', '#3498DB'],
-        sizes: ['均码'],
-        stock: 250,
-        reviews: [],
-        created_at: new Date().toISOString() 
-      }
-    ],
+    products: mockProducts,
     chat_messages: [],
     users: []
   };
@@ -246,5 +252,40 @@ if (config.useMock) {
   // 真实Supabase客户端
   supabase = createClient(config.supabase.url, config.supabase.key);
 }
+
+export const mockProducts = [
+  {
+    id: 1, name: '智能手表 Pro',
+    images: ['https://ts4.tc.mm.bing.net/th/id/OIP-C.VP82W90NG4jgee06tQemgQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3', 'https://ts3.tc.mm.bing.net/th/id/OIP-C.Va6Kix185-0fUdv1GErmtwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3', 'https://n.sinaimg.cn/sinacn10119/74/w2048h1226/20191118/fd91-iipztfe7943518.jpg'],
+    price: 1299, original_price: 1599, cost_price: 900,
+    description: '这款智能手表具有心率监测、睡眠追踪、防水等功能，采用高清触摸屏幕，支持多种运动模式，续航时间长达7天，是您健康生活的好帮手。',
+    category: '智能设备', colors: ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF'],
+    sizes: ['S', 'M', 'L', 'XL'], stock: 150, reviews: []
+  },
+  {
+    id: 2, name: '智能手机 X',
+    images: ['https://picsum.photos/id/1016/600/400', 'https://picsum.photos/id/1017/600/400', 'https://picsum.photos/id/1019/600/400'],
+    price: 6999, original_price: 7999, cost_price: 4900,
+    description: '旗舰级智能手机，强大性能，出色拍照体验，支持5G网络，大容量电池，让您畅享智能生活。',
+    category: '智能设备', colors: ['#000000', '#FFFFFF', '#FF6B6B', '#4ECDC4'],
+    sizes: ['64GB', '128GB', '256GB', '512GB'], stock: 200, reviews: []
+  },
+  {
+    id: 3, name: '智能音箱',
+    images: ['https://picsum.photos/id/1018/600/400', 'https://picsum.photos/id/1020/600/400', 'https://picsum.photos/id/1021/600/400'],
+    price: 299, original_price: 399, cost_price: 200,
+    description: '智能语音助手，支持多种智能家居控制，高品质音效，清晰语音识别，让您的家更智能。',
+    category: '智能家居', colors: ['#000000', '#FFFFFF', '#F7DC6F', '#85C1E9'],
+    sizes: ['标准版', '增强版'], stock: 300, reviews: []
+  },
+  {
+    id: 4, name: '无线耳机',
+    images: ['https://picsum.photos/id/1019/600/400', 'https://picsum.photos/id/1022/600/400', 'https://picsum.photos/id/1023/600/400'],
+    price: 799, original_price: 999, cost_price: 550,
+    description: '主动降噪，高清音质，舒适佩戴，长效续航，支持无线充电，让您享受沉浸式音乐体验。',
+    category: '智能设备', colors: ['#000000', '#FFFFFF', '#9B59B6', '#3498DB'],
+    sizes: ['均码'], stock: 250, reviews: []
+  }
+];
 
 export default supabase

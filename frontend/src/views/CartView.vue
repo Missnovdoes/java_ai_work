@@ -149,6 +149,7 @@ const removeFromCart = (id) => {
 
 const saveToLocalStorage = () => {
   localStorage.setItem('cartItems', JSON.stringify(cartItems.value))
+  window.dispatchEvent(new Event('cart-updated'))
 }
 
 // 从本地存储加载购物车数据
